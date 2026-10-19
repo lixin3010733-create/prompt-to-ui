@@ -1,0 +1,86 @@
+/* ============================================================
+   TERRA design tokens
+   ------------------------------------------------------------
+   Component geometry follows Ant Design spec:
+     radius   6 / 10 / 14 / 20
+     spacing  8pt grid
+     control  44-50px
+   Typography: Fraunces (display) + Manrope (body)
+   Photography: Unsplash
+   ============================================================ */
+
+:root {
+  /* --- color · forest ramp --- */
+  --forest-950: #0B1C14;  /* dark screen base, body text */
+  --forest-900: #10261B;
+  --forest-800: #163527;  /* dark cards, avatar fill */
+  --forest-700: #1D4331;
+  --forest-500: #2E6B4B;  /* secondary accent, icons */
+  --forest-300: #7FA892;
+
+  /* --- color · fluorescent accent --- */
+  --lime:      #C8F751;  /* primary CTA, chips, badge, active tab */
+  --lime-600:  #9EC93C;  /* accent text on light surfaces */
+
+  /* --- color · surfaces --- */
+  --paper:     #F1EFE7;  /* page background */
+  --paper-card:#FBFBF7;  /* card and sheet background */
+
+  /* --- color · text --- */
+  --ink:   #10261B;
+  --ink-2: #5C6B62;
+  --ink-3: #8C9991;
+  --hair:  rgba(16, 38, 27, .10);   /* 1px borders */
+
+  /* --- color · inverse (dark screens) --- */
+  --on-dark:        #F3F5F0;
+  --on-dark-dim:    rgba(243, 245, 240, .72);
+  --on-dark-border: rgba(243, 245, 240, .26);
+
+  /* --- radius (AntD scale) --- */
+  --r-sm:  6px;
+  --r-md:  10px;
+  --r-lg:  14px;
+  --r-xl:  20px;
+  --r-pill:999px;
+
+  /* --- spacing (8pt grid) --- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+
+  /* --- type scale --- */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --t-caption: 10.5px;  /* labels, letterspaced uppercase */
+  --t-meta:    11.5px;  /* secondary metadata */
+  --t-body:    13px;    /* list body text */
+  --t-label:   14.5px;  /* button label */
+  --t-h3:      19px;    /* screen subtitle */
+  --t-h2:      24px;    /* detail sheet title */
+  --t-h1:      38px;    /* onboarding headline */
+
+  /* --- control --- */
+  --control-h:   50px;   /* default */
+  --control-h-sm:44px;   /* search field */
+
+  /* --- motion --- */
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --dur:  .35s;
+}
+
+/* ============================================================
+   Usage notes
+   ------------------------------------------------------------
+   1. Do not introduce radius values outside the four steps above.
+   2. Keep the fluorescent accent for CTA, chips, badges and the
+      active tab only — nowhere else.
+   3. Never use pure #000 or #fff for surfaces or text.
+   4. When pairing a semantic colour (red / green), always carry a
+      second cue — icon, label or pattern — for colour-blind users.
+   5. Every list needs empty, loading and error states.
+   ============================================================ */

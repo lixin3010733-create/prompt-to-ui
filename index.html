@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TERRA — Outdoor Travel App UI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TERRA design tokens
+   Component geometry follows Ant Design spec (radius / spacing /
+   type scale / elevation); imagery: Unsplash; layout: standard
+   mobile app template (onboarding · home · detail).
+   ============================================================ */
+:root{
+  --forest-950:#0B1C14;
+  --forest-900:#10261B;
+  --forest-800:#163527;
+  --forest-700:#1D4331;
+  --forest-500:#2E6B4B;
+  --forest-300:#7FA892;
+  --lime:#C8F751;
+  --lime-600:#9EC93C;
+  --paper:#F1EFE7;
+  --paper-card:#FBFBF7;
+  --ink:#10261B;
+  --ink-2:#5C6B62;
+  --ink-3:#8C9991;
+  --hair:rgba(16,38,27,.10);
+
+  /* AntD radius scale */
+  --r-sm:6px; --r-md:10px; --r-lg:14px; --r-xl:20px; --r-pill:999px;
+  /* AntD spacing scale */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Manrope',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.6;
+  overflow-x:hidden;
+}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+
+/* ---------- contour decoration ---------- */
+.contour{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.contour svg{position:absolute;top:-40px;right:-60px;width:640px;opacity:.5}
+
+/* ---------- masthead ---------- */
+header{position:relative;z-index:1;padding:64px 0 40px}
+.brandrow{display:flex;align-items:center;gap:12px;margin-bottom:36px}
+.mark{width:34px;height:34px;border-radius:10px;background:var(--forest-900);
+  display:grid;place-items:center;flex:none}
+.mark svg{width:18px;height:18px}
+.brandname{font-family:'Fraunces',Georgia,serif;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.brandrow .tagline{font-size:12.5px;color:var(--ink-2);margin-left:auto;letter-spacing:.02em}
+
+h1{font-family:'Fraunces',Georgia,serif;font-weight:500;
+  font-size:clamp(30px,4.4vw,50px);line-height:1.08;letter-spacing:-.025em;
+  max-width:15ch;margin-bottom:18px}
+.h1-accent{color:var(--forest-500);font-style:italic}
+.sub{font-size:15px;color:var(--ink-2);max-width:46ch;margin-bottom:34px}
+
+.prompt{border:1px solid var(--hair);border-radius:var(--r-lg);background:var(--paper-card);
+  padding:20px 22px;max-width:720px;position:relative}
+.prompt .label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:10px}
+.prompt p{font-family:'Fraunces',Georgia,serif;font-size:16px;line-height:1.65;
+  color:var(--forest-800);letter-spacing:-.01em}
+.prompt .lime{background:var(--lime);border-radius:4px;padding:0 5px}
+
+/* ---------- stage ---------- */
+.stage{position:relative;z-index:1;padding:24px 0 20px;
+  display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+figure{margin:0;width:340px;flex:none}
+.phone{width:340px;height:720px;background:var(--forest-950);border-radius:42px;
+  padding:9px;box-shadow:0 1px 0 rgba(255,255,255,.06) inset,
+  0 24px 60px -28px rgba(11,28,20,.45), 0 2px 6px rgba(11,28,20,.10);
+  transition:transform .5s var(--ease)}
+figure:hover .phone{transform:translateY(-6px)}
+.screen{position:relative;width:100%;height:100%;border-radius:34px;overflow:hidden;
+  background:var(--paper-card);display:flex;flex-direction:column}
+figcaption{display:flex;align-items:baseline;gap:10px;margin:18px 4px 0}
+figcaption .num{font-size:11px;letter-spacing:.14em;color:var(--lime-600);
+  font-weight:700;background:var(--forest-900);border-radius:var(--r-sm);padding:3px 7px}
+figcaption .name{font-family:'Fraunces',Georgia,serif;font-size:16px;font-weight:600}
+figcaption .note{font-size:12.5px;color:var(--ink-2);margin-left:auto}
+
+/* ---------- shared inside phone ---------- */
+.statusbar{height:38px;flex:none;display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;font-size:12px;font-weight:600;letter-spacing:.02em}
+.statusbar .icons{display:flex;align-items:center;gap:5px}
+.bar{display:block;background:currentColor;border-radius:1px}
+.imgfill{width:100%;height:100%;object-fit:cover;display:block;background:linear-gradient(160deg,#1D4331,#0B1C14)}
+
+/* ---------- screen 1 · onboarding ---------- */
+.s1{background:var(--forest-950);color:#F3F5F0}
+.s1 .hero{position:absolute;inset:0}
+.s1 .scrim{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(11,28,20,.55) 0%,rgba(11,28,20,.10) 34%,rgba(11,28,20,.86) 72%,var(--forest-950) 96%)}
+.s1 .statusbar{color:#F3F5F0;position:relative;z-index:2}
+.s1 .top{position:relative;z-index:2;display:flex;justify-content:flex-end;padding:8px 22px 0}
+.skip{font-size:12.5px;color:rgba(243,245,240,.78);letter-spacing:.03em}
+.s1 .bottom{position:relative;z-index:2;margin-top:auto;padding:0 26px 34px}
+.eyebrow{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--lime);margin-bottom:12px;font-weight:600}
+.s1 h2{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:38px;line-height:1.06;
+  letter-spacing:-.03em;margin-bottom:14px}
+.s1 h2 em{font-style:italic;color:var(--lime)}
+.lede{font-size:13.5px;line-height:1.62;color:rgba(243,245,240,.72);margin-bottom:26px;max-width:29ch}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  height:50px;border-radius:var(--r-md);font-size:14.5px;font-weight:600;font-family:inherit;
+  border:none;cursor:pointer;letter-spacing:.01em;transition:transform .35s var(--ease),background .35s var(--ease)}
+.btn:active{transform:scale(.985)}
+.btn-primary{background:var(--lime);color:var(--forest-950)}
+.btn-primary:hover{background:#D6FF6B}
+.btn-ghost{background:transparent;color:rgba(243,245,240,.86);
+  border:1px solid rgba(243,245,240,.26);margin-top:10px;font-weight:500}
+.btn-ghost:hover{border-color:rgba(243,245,240,.5)}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:22px}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(243,245,240,.28)}
+.dot.on{width:20px;border-radius:3px;background:var(--lime)}
+
+/* ---------- screen 2 · home ---------- */
+.s2{background:var(--paper)}
+.s2 .statusbar{color:var(--forest-900)}
+.s2 .head{padding:4px 22px 0;display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--forest-800);color:var(--lime);
+  display:grid;place-items:center;font-size:13px;font-weight:700;letter-spacing:.02em;flex:none}
+.hello{font-size:11.5px;color:var(--ink-2);letter-spacing:.02em}
+.who{font-family:'Fraunces',Georgia,serif;font-size:17px;font-weight:600;letter-spacing:-.015em;line-height:1.2}
+.loc{margin-left:auto;text-align:right;font-size:11px;color:var(--ink-2);line-height:1.35}
+.loc b{display:block;font-weight:600;color:var(--forest-700);font-size:11.5px}
+.s2 h3{font-family:'Fraunces',Georgia,serif;font-size:19px;font-weight:500;
+  letter-spacing:-.02em;padding:22px 22px 0;line-height:1.15}
+.s2 h3 em{font-style:italic;color:var(--forest-500)}
+.search{margin:14px 22px 0;height:44px;border-radius:var(--r-md);background:#fff;
+  border:1px solid var(--hair);display:flex;align-items:center;gap:10px;padding:0 14px;
+  color:var(--ink-3);font-size:13px}
+.search .ico{width:15px;height:15px;flex:none}
+.chips{display:flex;gap:8px;padding:14px 22px 0;overflow:hidden}
+.chip{font-size:11.5px;font-weight:600;padding:7px 13px;border-radius:var(--r-pill);
+  background:#fff;border:1px solid var(--hair);color:var(--ink-2);white-space:nowrap}
+.chip.on{background:var(--forest-900);color:var(--lime);border-color:var(--forest-900)}
+.sec{display:flex;align-items:baseline;padding:20px 22px 10px}
+.sec .t{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--forest-800)}
+.sec .more{font-size:11.5px;color:var(--forest-500);font-weight:600;margin-left:auto}
+.rows{padding:0 22px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:12px;background:#fff;border-radius:var(--r-lg);padding:8px;
+  border:1px solid var(--hair);align-items:center}
+.thumb{width:78px;height:78px;border-radius:var(--r-md);overflow:hidden;flex:none;
+  background:linear-gradient(160deg,#2E6B4B,#163527)}
+.row .info{min-width:0;flex:1}
+.row .nm{font-size:13.5px;font-weight:600;letter-spacing:-.01em;line-height:1.3}
+.row .meta{font-size:11px;color:var(--ink-2);margin-top:3px}
+.tagline2{display:flex;align-items:center;gap:6px;margin-top:6px}
+.tg{font-size:10px;font-weight:700;letter-spacing:.04em;padding:3px 7px;border-radius:var(--r-sm);
+  background:rgba(46,107,75,.12);color:var(--forest-700)}
+.tg.lime{background:rgba(158,201,60,.26);color:#4A6613}
+.stars{display:flex;align-items:center;gap:4px;margin-left:auto;font-size:11px;
+  font-weight:700;color:var(--forest-800)}
+.stars .star{width:10px;height:10px}
+.tabbar{margin-top:auto;flex:none;height:66px;border-top:1px solid var(--hair);background:#fff;
+  display:flex;align-items:flex-end;justify-content:space-around;padding:0 8px 13px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:9.5px;
+  font-weight:600;color:var(--ink-3);letter-spacing:.02em}
+.tab svg{width:21px;height:21px;opacity:.55}
+.tab.on{color:var(--forest-900)}
+.tab.on svg{opacity:1;filter:drop-shadow(0 0 0 rgba(0,0,0,0))}
+.tab.on .ic-wrap{width:38px;height:26px;border-radius:var(--r-pill);background:var(--lime);
+  display:grid;place-items:center}
+
+/* ---------- screen 3 · event ---------- */
+.s3{background:var(--paper)}
+.s3 .hero{position:relative;height:222px;flex:none}
+.s3 .statusbar{color:#F3F5F0;position:absolute;top:0;left:0;right:0;z-index:4}
+.s3 .floattop{position:absolute;top:46px;left:0;right:0;z-index:3;
+  display:flex;justify-content:space-between;padding:0 20px}
+.rnd{width:32px;height:32px;border-radius:50%;background:rgba(11,28,20,.40);
+  backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.20);
+  display:grid;place-items:center}
+.rnd svg{width:15px;height:15px}
+.badge{position:absolute;left:20px;bottom:-14px;z-index:3;background:var(--lime);
+  color:var(--forest-950);border-radius:var(--r-md);padding:8px 12px;text-align:center;
+  box-shadow:0 8px 18px -10px rgba(11,28,20,.5)}
+.badge .d{font-family:'Fraunces',Georgia,serif;font-size:19px;font-weight:600;line-height:1}
+.badge .m{font-size:9.5px;font-weight:700;letter-spacing:.12em;margin-top:2px}
+.sheet{flex:1;background:var(--paper-card);border-radius:var(--r-xl) var(--r-xl) 0 0;
+  margin-top:-8px;padding:20px 20px 0;overflow:hidden}
+.sheet .kicker{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--lime-600);font-weight:700;margin-bottom:8px}
+.sheet h2{font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:500;
+  letter-spacing:-.025em;line-height:1.12;margin-bottom:8px}
+.sheet .desc{font-size:12.5px;color:var(--ink-2);line-height:1.55;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--hair);border-radius:var(--r-md);padding:9px 11px}
+.stat .v{font-family:'Fraunces',Georgia,serif;font-size:17px;font-weight:600;letter-spacing:-.02em}
+.stat .k{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:2px}
+.people{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--hair);
+  border-bottom:1px solid var(--hair);margin-bottom:14px}
+.stack{display:flex}
+.stack span{width:26px;height:26px;border-radius:50%;border:2px solid var(--paper-card);
+  margin-left:-8px;display:grid;place-items:center;font-size:10px;font-weight:700;color:#F3F5F0}
+.stack span:first-child{margin-left:0}
+.people .who2{font-size:11.5px;color:var(--ink-2);line-height:1.35}
+.people .who2 b{color:var(--forest-800);font-weight:700}
+.tl{position:relative;padding-left:20px}
+.tl::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--hair)}
+.tl .step{position:relative;padding-bottom:12px}
+.tl .step::before{content:"";position:absolute;left:-19px;top:5px;width:9px;height:9px;
+  border-radius:50%;background:var(--paper-card);border:2px solid var(--forest-500)}
+.tl .step.done::before{background:var(--lime);border-color:var(--lime-600)}
+.tl .h{font-size:12.5px;font-weight:700;letter-spacing:.01em}
+.tl .p{font-size:11.5px;color:var(--ink-2);margin-top:1px}
+.ctabar{margin-top:auto;flex:none;display:flex;align-items:center;gap:14px;
+  padding:12px 20px 14px;border-top:1px solid var(--hair);background:var(--paper-card)}
+.price .p1{font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:600;letter-spacing:-.02em}
+.price .p2{font-size:10.5px;color:var(--ink-3);letter-spacing:.04em}
+.ctabar .btn{height:48px;border-radius:var(--r-md);flex:1;font-size:14.5px}
+
+/* ---------- token strip ---------- */
+.tokens{position:relative;z-index:1;margin:72px 0 0;padding:36px 0 0;border-top:1px solid var(--hair)}
+.tokens h4{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);
+  margin-bottom:18px;font-weight:700}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.sw{width:104px}
+.sw .chip{height:56px;border-radius:var(--r-md);border:1px solid var(--hair)}
+.sw .nm{font-size:11.5px;font-weight:600;margin-top:7px;letter-spacing:.01em}
+.sw .hex{font-size:10.5px;color:var(--ink-3);font-family:'Manrope',monospace}
+.sources{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;
+  padding-bottom:64px}
+.src .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime-600);
+  font-weight:700;margin-bottom:6px}
+.src .v{font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.src .v b{color:var(--ink);font-weight:600}
+
+@media(max-width:1180px){
+  .stage{gap:28px}
+}
+@media(max-width:760px){
+  .wrap{padding:0 20px}
+  header{padding:40px 0 28px}
+  .brandrow .tagline{display:none}
+  .stage{gap:40px}
+  .phone,.screen{height:700px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="contour" aria-hidden="true">
+  <svg viewBox="0 0 640 420" fill="none">
+    <g stroke="#1D4331" stroke-opacity=".13" stroke-width="1">
+      <path d="M-20 60C90 20 180 110 300 80s240-90 380-40"/>
+      <path d="M-20 104C90 64 180 154 300 124s240-90 380-40"/>
+      <path d="M-20 148C90 108 180 198 300 168s240-90 380-40"/>
+      <path d="M-20 192C90 152 180 242 300 212s240-90 380-40"/>
+      <path d="M-20 236C90 196 180 286 300 256s240-90 380-40"/>
+      <path d="M-20 280C90 240 180 330 300 300s240-90 380-40"/>
+      <path d="M-20 324C90 284 180 374 300 344s240-90 380-40"/>
+      <path d="M-20 368C90 328 180 418 300 388s240-90 380-40"/>
+    </g>
+  </svg>
+</div>
+
+<div class="wrap">
+
+<header>
+  <div class="brandrow">
+    <div class="mark">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M2 15l5-7 3.5 4.5L13 9l5 6H2z" fill="#C8F751"/><circle cx="15" cy="5" r="2" fill="#C8F751"/></svg>
+    </div>
+    <div class="brandname">TERRA</div>
+    <div class="tagline">Outdoor travel · UI concept · 3 screens</div>
+  </div>
+
+  <h1>Three screens, <span class="h1-accent">one system.</span></h1>
+  <p class="sub">Generated from a single prompt — components snapped to Ant&nbsp;Design geometry, photography pulled from Unsplash, layout and copy composed by the model.</p>
+
+  <div class="prompt">
+    <div class="label">Prompt</div>
+    <p>Generate 3 English outdoor travel app UI screens — <span class="lime">onboarding</span>, <span class="lime">home</span>, <span class="lime">event</span>. Forest green theme with fluorescent green accents, rounded cards, natural landscape photography. Clean, premium, consistent.</p>
+  </div>
+</header>
+
+<main class="stage">
+
+  <!-- 01 ONBOARDING -->
+  <figure>
+    <div class="phone">
+      <div class="screen s1">
+        <div class="hero">
+          <img class="imgfill" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80" alt="Misty pine forest at dawn" onerror="this.style.visibility='hidden'">
+        </div>
+        <div class="scrim"></div>
+        <div class="statusbar"><span>9:41</span>
+          <span class="icons">
+            <span class="bar" style="width:3px;height:5px"></span>
+            <span class="bar" style="width:3px;height:8px"></span>
+            <span class="bar" style="width:3px;height:11px"></span>
+            <span class="bar" style="width:14px;height:8px;border-radius:2px;opacity:.55"></span>
+          </span>
+        </div>
+        <div class="top"><span class="skip">Skip</span></div>
+        <div class="bottom">
+          <div class="eyebrow">Offline maps · 2,400 routes</div>
+          <h2>Find your<br>own <em>trail</em></h2>
+          <p class="lede">Curated routes, elevation profiles and offline maps — built for whatever the wild throws at you.</p>
+          <button class="btn btn-primary">Get started</button>
+          <button class="btn btn-ghost">I already have an account</button>
+          <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="num">01</span><span class="name">Onboarding</span><span class="note">Full-bleed hero</span></figcaption>
+  </figure>
+
+  <!-- 02 HOME -->
+  <figure>
+    <div class="phone">
+      <div class="screen s2">
+        <div class="statusbar"><span>9:41</span>
+          <span class="icons">
+            <span class="bar" style="width:3px;height:5px"></span>
+            <span class="bar" style="width:3px;height:8px"></span>
+            <span class="bar" style="width:3px;height:11px"></span>
+            <span class="bar" style="width:14px;height:8px;border-radius:2px;opacity:.55"></span>
+          </span>
+        </div>
+        <div class="head">
+          <div class="avatar">AK</div>
+          <div>
+            <div class="hello">Good morning</div>
+            <div class="who">Alex Keane</div>
+          </div>
+          <div class="loc"><b>Sierra Nevada</b>Clear · 14°</div>
+        </div>
+
+        <h3>Where to<br>this <em>weekend</em>?</h3>
+
+        <div class="search">
+          <svg class="ico" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="#8C9991" stroke-width="1.4"/><path d="M10.6 10.6L14 14" stroke="#8C9991" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Search trails, parks, peaks
+        </div>
+
+        <div class="chips">
+          <span class="chip on">All</span>
+          <span class="chip">Hiking</span>
+          <span class="chip">Camping</span>
+          <span class="chip">Cycling</span>
+          <span class="chip">Climb</span>
+        </div>
+
+        <div class="sec"><span class="t">Nearby trails</span><span class="more">See all</span></div>
+
+        <div class="rows">
+          <div class="row">
+            <div class="thumb"><img class="imgfill" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80" alt="Sunlight through a beech forest" onerror="this.style.visibility='hidden'"></div>
+            <div class="info">
+              <div class="nm">Cedar Hollow Loop</div>
+              <div class="meta">8.2 km · 340 m gain · 2h 40m</div>
+              <div class="tagline2"><span class="tg">Moderate</span><span class="tg lime">Offline ready</span>
+                <span class="stars"><svg class="star" viewBox="0 0 12 12"><path d="M6 1l1.5 3.2 3.5.4-2.6 2.4.7 3.5L6 8.7 2.9 10.5l.7-3.5L1 4.6l3.5-.4L6 1z" fill="#10261B"/></svg>4.8</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="thumb"><img class="imgfill" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=400&q=80" alt="Mountain lake at golden hour" onerror="this.style.visibility='hidden'"></div>
+            <div class="info">
+              <div class="nm">Mirror Lake Ridge</div>
+              <div class="meta">14.6 km · 780 m gain · 5h 10m</div>
+              <div class="tagline2"><span class="tg">Hard</span>
+                <span class="stars"><svg class="star" viewBox="0 0 12 12"><path d="M6 1l1.5 3.2 3.5.4-2.6 2.4.7 3.5L6 8.7 2.9 10.5l.7-3.5L1 4.6l3.5-.4L6 1z" fill="#10261B"/></svg>4.9</span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="thumb"><img class="imgfill" src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=400&q=80" alt="Mountain range at sunset" onerror="this.style.visibility='hidden'"></div>
+            <div class="info">
+              <div class="nm">Fern Ridge Traverse</div>
+              <div class="meta">5.4 km · 120 m gain · 1h 30m</div>
+              <div class="tagline2"><span class="tg">Easy</span><span class="tg lime">Dog friendly</span>
+                <span class="stars"><svg class="star" viewBox="0 0 12 12"><path d="M6 1l1.5 3.2 3.5.4-2.6 2.4.7 3.5L6 8.7 2.9 10.5l.7-3.5L1 4.6l3.5-.4L6 1z" fill="#10261B"/></svg>4.6</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabbar">
+          <div class="tab on"><span class="ic-wrap"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><circle cx="10" cy="10" r="7"/><path d="M13.6 6.4l-2.1 5.1-5.1 2.1 2.1-5.1z" fill="currentColor" stroke="none"/></svg></span>Explore</div>
+          <div class="tab"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M2 15.5l4.5-6.5 3 4 2.8-4L17 15.5z"/></svg>Trails</div>
+          <div class="tab"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M10 17s5.2-5 5.2-8.8A5.2 5.2 0 004.8 8.2C4.8 12 10 17 10 17z"/><circle cx="10" cy="8" r="1.8"/></svg>Map</div>
+          <div class="tab"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M5.5 3.5h9v13l-4.5-3.4-4.5 3.4z"/></svg>Saved</div>
+          <div class="tab"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><circle cx="10" cy="7" r="3.1"/><path d="M4.6 16.6c1.2-2.9 3.1-4.3 5.4-4.3s4.2 1.4 5.4 4.3"/></svg>Profile</div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="num">02</span><span class="name">Home</span><span class="note">Search · chips · list</span></figcaption>
+  </figure>
+
+  <!-- 03 EVENT -->
+  <figure>
+    <div class="phone">
+      <div class="screen s3">
+        <div class="hero">
+          <img class="imgfill" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80" alt="Starry night over a mountain ridge" onerror="this.style.visibility='hidden'">
+          <div class="badge">
+            <div class="d">24</div>
+            <div class="m">OCT</div>
+          </div>
+        </div>
+        <div class="statusbar"><span>9:41</span>
+          <span class="icons">
+            <span class="bar" style="width:3px;height:5px"></span>
+            <span class="bar" style="width:3px;height:8px"></span>
+            <span class="bar" style="width:3px;height:11px"></span>
+            <span class="bar" style="width:14px;height:8px;border-radius:2px;opacity:.55"></span>
+          </span>
+        </div>
+        <div class="floattop">
+          <div class="rnd"><svg viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#F3F5F0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="rnd"><svg viewBox="0 0 16 16" fill="none"><path d="M8 10.5V2.8M8 2.8L5.3 5.5M8 2.8l2.7 2.7" stroke="#F3F5F0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.2 9.6v2.7c0 .8.7 1.5 1.5 1.5h6.6c.8 0 1.5-.7 1.5-1.5V9.6" stroke="#F3F5F0" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        </div>
+
+        <div class="sheet">
+          <div class="kicker">Group event · 18 spots left</div>
+          <h2>Midnight Ridge<br>Trail Run</h2>
+          <p class="desc">A guided night ascent with headlamps, hot soup at the saddle and a sunrise finish above the cloud line.</p>
+
+          <div class="stats">
+            <div class="stat"><div class="v">12.4</div><div class="k">Km</div></div>
+            <div class="stat"><div class="v">920</div><div class="k">M gain</div></div>
+            <div class="stat"><div class="v">6h</div><div class="k">Duration</div></div>
+          </div>
+
+          <div class="people">
+            <div class="stack">
+              <span style="background:#1D4331">MV</span>
+              <span style="background:#2E6B4B">JR</span>
+              <span style="background:#4A6613">SL</span>
+              <span style="background:#8C9991">+9</span>
+            </div>
+            <div class="who2"><b>Maya V.</b> is hosting<br>12 hikers joined this week</div>
+          </div>
+
+          <div class="tl">
+            <div class="step done"><div class="h">21:40 — Trailhead briefing</div><div class="p">Pine Flats car park · gear check</div></div>
+            <div class="step"><div class="h">22:15 — Ascent begins</div><div class="p">Steady pace, 3 regroup stops</div></div>
+            <div class="step"><div class="h">04:50 — Summit sunrise</div><div class="p">Hot soup, descent by 07:30</div></div>
+          </div>
+        </div>
+
+        <div class="ctabar">
+          <div class="price"><div class="p1">$45</div><div class="p2">PER PERSON</div></div>
+          <button class="btn btn-primary">Join event</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="num">03</span><span class="name">Event</span><span class="note">Hero · itinerary · CTA</span></figcaption>
+  </figure>
+
+</main>
+
+<section class="tokens">
+  <h4>Color tokens</h4>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#0B1C14"></div><div class="nm">Forest 950</div><div class="hex">#0B1C14</div></div>
+    <div class="sw"><div class="chip" style="background:#163527"></div><div class="nm">Forest 800</div><div class="hex">#163527</div></div>
+    <div class="sw"><div class="chip" style="background:#2E6B4B"></div><div class="nm">Forest 500</div><div class="hex">#2E6B4B</div></div>
+    <div class="sw"><div class="chip" style="background:#C8F751"></div><div class="nm">Fluorescent</div><div class="hex">#C8F751</div></div>
+    <div class="sw"><div class="chip" style="background:#F1EFE7"></div><div class="nm">Paper</div><div class="hex">#F1EFE7</div></div>
+    <div class="sw"><div class="chip" style="background:#FBFBF7"></div><div class="nm">Card</div><div class="hex">#FBFBF7</div></div>
+  </div>
+
+  <div class="sources">
+    <div class="src">
+      <div class="k">Components</div>
+      <div class="v">Geometry follows <b>Ant Design</b> — radius 6/10/14/20, 8pt spacing grid, 44–50px control height, filled &amp; ghost button pair, tag, list row, tabs.</div>
+    </div>
+    <div class="src">
+      <div class="k">Imagery</div>
+      <div class="v"><b>Unsplash</b> landscape photography, keyword-matched to the prompt: misty forest, mountain lake, alpine sunset, night ridge.</div>
+    </div>
+    <div class="src">
+      <div class="k">Layout &amp; copy</div>
+      <div class="v">Standard mobile template — onboarding, home feed, event detail. Names, distances and ratings are <b>generated placeholder data</b>.</div>
+    </div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

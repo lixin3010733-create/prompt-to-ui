@@ -1,0 +1,92 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "name": "TERRA",
+  "description": "Outdoor travel UI system. Component geometry follows Ant Design; photography from Unsplash.",
+  "version": "1.0.0",
+  "generated": "2026-10-19",
+
+  "color": {
+    "forest": {
+      "950": { "value": "#0B1C14", "type": "color", "description": "Dark screen base, body text" },
+      "900": { "value": "#10261B", "type": "color", "description": "Primary ink" },
+      "800": { "value": "#163527", "type": "color", "description": "Dark cards, avatar fill" },
+      "700": { "value": "#1D4331", "type": "color", "description": "Dark interactive" },
+      "500": { "value": "#2E6B4B", "type": "color", "description": "Secondary accent, icons" },
+      "300": { "value": "#7FA892", "type": "color", "description": "Muted forest" }
+    },
+    "accent": {
+      "lime":     { "value": "#C8F751", "type": "color", "description": "Primary CTA, chips, badge, active tab" },
+      "lime-600": { "value": "#9EC93C", "type": "color", "description": "Accent text on light surfaces" }
+    },
+    "surface": {
+      "paper":      { "value": "#F1EFE7", "type": "color", "description": "Page background" },
+      "card":       { "value": "#FBFBF7", "type": "color", "description": "Card and sheet background" },
+      "elevated":   { "value": "#FFFFFF", "type": "color", "description": "Raised list rows and stat cards" }
+    },
+    "text": {
+      "primary":   { "value": "#10261B", "type": "color" },
+      "secondary": { "value": "#5C6B62", "type": "color" },
+      "tertiary":  { "value": "#8C9991", "type": "color" },
+      "inverse":   { "value": "#F3F5F0", "type": "color" }
+    },
+    "border": {
+      "hair": { "value": "rgba(16,38,27,0.10)", "type": "color", "description": "1px hairline borders" }
+    }
+  },
+
+  "radius": {
+    "sm":   { "value": "6px",  "type": "dimension" },
+    "md":   { "value": "10px", "type": "dimension" },
+    "lg":   { "value": "14px", "type": "dimension" },
+    "xl":   { "value": "20px", "type": "dimension" },
+    "pill": { "value": "999px","type": "dimension" }
+  },
+
+  "space": {
+    "1": { "value": "4px",  "type": "dimension" },
+    "2": { "value": "8px",  "type": "dimension" },
+    "3": { "value": "12px", "type": "dimension" },
+    "4": { "value": "16px", "type": "dimension" },
+    "5": { "value": "24px", "type": "dimension" },
+    "6": { "value": "32px", "type": "dimension" }
+  },
+
+  "size": {
+    "control":      { "value": "50px", "type": "dimension" },
+    "control-sm":   { "value": "44px", "type": "dimension" },
+    "thumb":        { "value": "78px", "type": "dimension" },
+    "avatar":       { "value": "40px", "type": "dimension" },
+    "statusbar":    { "value": "38px", "type": "dimension" },
+    "tabbar":       { "value": "66px", "type": "dimension" },
+    "screen-width": { "value": "340px","type": "dimension" },
+    "screen-height":{ "value": "720px","type": "dimension" }
+  },
+
+  "fontFamily": {
+    "display": { "value": "Fraunces, Georgia, serif", "type": "fontFamily" },
+    "body":    { "value": "Manrope, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif", "type": "fontFamily" }
+  },
+
+  "fontSize": {
+    "caption": { "value": "10.5px", "type": "dimension" },
+    "meta":    { "value": "11.5px", "type": "dimension" },
+    "body":    { "value": "13px",   "type": "dimension" },
+    "label":   { "value": "14.5px", "type": "dimension" },
+    "h3":      { "value": "19px",   "type": "dimension" },
+    "h2":      { "value": "24px",   "type": "dimension" },
+    "h1":      { "value": "38px",   "type": "dimension" }
+  },
+
+  "motion": {
+    "ease":       { "value": "cubic-bezier(0.22, 1, 0.36, 1)", "type": "cubicBezier" },
+    "duration":   { "value": "350ms", "type": "duration" }
+  },
+
+  "rules": [
+    "Radius must come from the four defined steps only.",
+    "Fluorescent accent is reserved for CTA, chips, badges and active tab.",
+    "Never use pure #000 or #fff for surfaces or text.",
+    "Semantic colours must carry a second cue beyond hue.",
+    "Every list requires empty, loading and error states."
+  ]
+}
