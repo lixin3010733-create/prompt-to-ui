@@ -1,0 +1,14 @@
+# 统一行尾，避免跨平台协作时的 diff 噪音
+* text=auto eol=lf
+
+# 二进制资源不走行尾转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+
+# Demo 页面在 GitHub Pages 上作为静态资源直接托管
+index.html linguist-documentation=false
